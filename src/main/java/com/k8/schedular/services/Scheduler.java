@@ -34,7 +34,8 @@ public class Scheduler {
                         0,false,null,null);
                 logger.info("Successfully deployed"+ deployment.getName());
             } catch (ApiException e) {
-                logger.error(e.getMessage());
+                e.printStackTrace();
+                logger.error(e.getResponseBody());
             }
         });
     }
