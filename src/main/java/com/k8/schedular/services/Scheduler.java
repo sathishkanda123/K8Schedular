@@ -13,9 +13,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
-public class Schedular {
+public class Scheduler {
 
-    Logger logger = LoggerFactory.getLogger(Schedular.class);
+    Logger logger = LoggerFactory.getLogger(Scheduler.class);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     @Scheduled(cron = "0 0 * * * SAT")
