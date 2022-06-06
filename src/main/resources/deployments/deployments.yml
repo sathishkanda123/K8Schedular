@@ -1,0 +1,8 @@
+application:
+  deployments:
+    -
+      name: mykri-deployment
+      svc:  mykri-svc
+    -
+      name: hellonode-deployment
+      svc: hellonode-svc
