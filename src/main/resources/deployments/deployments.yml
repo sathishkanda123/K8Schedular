@@ -1,8 +1,10 @@
 application:
   deployments:
     -
-      name: mykri-deployment
-      svc:  mykri-svc
+      namespace: default
+      name: hello-node
+      svc:  hello-node-svc
     -
+      namespace: default
       name: hellonode-deployment
       svc: hellonode-svc
