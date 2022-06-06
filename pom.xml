@@ -8,11 +8,11 @@
 		<version>2.7.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.k8.schedular</groupId>
-	<artifactId>K8Schedular</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>K8Schedular</name>
-	<description>K8Schedular</description>
+	<groupId>com.k8.scheduler</groupId>
+	<artifactId>K8Scheduler</artifactId>
+	<name>K8Scheduler</name>
+	<description>K8Scheduler</description>
+	<packaging>jar</packaging>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -46,17 +46,19 @@
 			<artifactId>client-java-extended</artifactId>
 			<version>15.0.1</version>
 		</dependency>
-
-
-
 	</dependencies>
-
 	<build>
+		<finalName>k8s-scheduler</finalName>
 		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<configuration>
+						<layers>
+							<enabled>true</enabled>
+						</layers>
+					</configuration>
+				</plugin>
 		</plugins>
 	</build>
 

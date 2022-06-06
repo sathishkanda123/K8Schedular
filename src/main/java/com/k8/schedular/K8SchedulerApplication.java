@@ -11,9 +11,9 @@ import java.io.IOException;
 
 @SpringBootApplication
 @EnableScheduling
-public class K8SchedularApplication {
+public class K8SchedulerApplication {
 
 	public static void main(String[] args) throws IOException, ApiException {
-		SpringApplication.run(K8SchedularApplication.class, args);
+		SpringApplication.run(K8SchedulerApplication.class, args);
 	}
 }
