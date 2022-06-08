@@ -8,3 +8,12 @@ application:
       namespace: default
       name: hellonode-deployment
       svc: hellonode-svc
+  createdeployments:
+    -
+      namespace: default
+      application: mykri
+      location: deployments/mykri-deployment.yml
+    -
+      namespace: default
+      application: hello-node
+      location: deployments/hello-node-deployment.yml
