@@ -1,17 +1,27 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-world
+  name: hello-node
+  namespace: default
+    labels:
+      app: hello-node
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: hello-node
   template:
     metadata:
       labels:
-        app: hello-world
-        visualize: "true"
+        app: hello-node
     spec:
       containers:
-        - name: hello-world-pod
-          image: marounbassam/hello-spring
-          ports:
-            - containerPort: 8080
+        - name: k8s-hello-node
+          image: 'k8s.gcr.io/echoserver:1.4'
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 250m
+            limits:
+              memory: 128Mi
+              cpu: 500m

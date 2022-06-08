@@ -5,9 +5,7 @@ import com.k8.schedular.config.MyKriProperties;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.models.V1Deployment;
-import io.kubernetes.client.openapi.models.V1DeploymentBuilder;
 import io.kubernetes.client.util.ClientBuilder;
-import io.kubernetes.client.util.Yaml;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +14,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 import static io.kubernetes.client.util.Yaml.load;
 
@@ -33,7 +34,7 @@ public class Scheduler {
     Logger logger = LoggerFactory.getLogger(Scheduler.class);
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    @Scheduled(cron = "0 */1 * * * *")
+   @Scheduled(cron = "0 */1 * * * *")
     public void deleteDeploymentResources() throws IOException {
         AppsV1Api api = new AppsV1Api(ClientBuilder.standard().build());
         logger.info("Delete a deployments started"+ formatter.format(LocalDateTime.now()));
@@ -54,11 +55,16 @@ public class Scheduler {
         AppsV1Api api = new AppsV1Api(ClientBuilder.standard().build());
         createDeploymentProperties.getCreateDeployments().forEach(deployment -> {
             try {
-                Object fileDeployment = load(new File(deployment.getLocation()));
-                V1Deployment v1Deployment = (V1Deployment) fileDeployment;
-                api.createNamespacedDeployment(deployment.getNamespace(),v1Deployment ,null,null,null,null);
-                logger.info("Sucessfully deployment created"+ deployment.getApplication()+"@"+formatter.format(LocalDateTime.now()));
-            } catch (IOException | ApiException e) {
+                URL resource = getClass().getClassLoader().getResource(deployment.getLocation());
+                if(Objects.nonNull(resource)){
+                    Object fileDeployment = load(new File(Objects.requireNonNull(resource).toURI()));
+                    V1Deployment v1Deployment = (V1Deployment) fileDeployment;
+                   api.createNamespacedDeployment(deployment.getNamespace(),v1Deployment ,null,null,null,null);
+                    logger.info("Successfully deployment created"+ deployment.getApplication()+"@"+formatter.format(LocalDateTime.now()));
+                } else{
+                    logger.info("Deployment not found"+ deployment.getApplication()+"@"+formatter.format(LocalDateTime.now()));
+                }
+            } catch (IOException | URISyntaxException | ApiException e) {
                 e.printStackTrace();
                 logger.info("Deployment creation failed.."+ deployment.getApplication()+"@"+ formatter.format(LocalDateTime.now())+"Exception is"+ e.getMessage());
             }
